@@ -16,6 +16,7 @@ library(tibble)
 library(scales)
 
 
+rsconnect::showLogs()
 
 
 # options(shiny.error = browser)
@@ -69,8 +70,8 @@ base_dir <- "C:/Users/ShidaNyimbili/Desktop/R/Mafisa-R-Scripts/Scripts"
 communities1 <- st_read(file.path(base_dir, "Grazing spatial data", "Cohort01_CommunityBoundaries.gpkg"))
 communities2 <- st_read(file.path(base_dir, "Grazing spatial data", "Cohort2_CommunityBoundaries.gpkg"))
 
-blocks1 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014_Cohort_0_1_Overlap_Correction", "20251014Cohort01OverlapCorrection.shp"))
-blocks2 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014_Cohort_2_Overlap_Correction", "20251014Cohort2OverlapCorrection.shp"))
+blocks1 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort01OverlapCorrection.shp"))
+blocks2 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort2OverlapCorrection.shp"))
 
 blocks1_elig <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort01OverlapCorrection_eligible.gpkg"))
 blocks2_elig <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort2OverlapCorrection_eligible.gpkg"))
@@ -1268,4 +1269,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-
+ 
