@@ -14,7 +14,6 @@ library(tibble)
 library(scales)
 
 
-
 sf_use_s2(FALSE)
 
 
