@@ -1,4 +1,6 @@
 library(shiny)
+library(shinycssloaders)
+library(tidyverse)
 library(leaflet)
 library(leaflet.extras)
 library(sf)
@@ -14,47 +16,78 @@ library(tibble)
 library(scales)
 
 
+
+
+# options(shiny.error = browser)
+# print("Starting app...")
+
+
+# setwd("C:/Users/ShidaNyimbili/Desktop/R/Mafisa-R-Scripts/app")
+# 
+# shiny::runApp()
+
+# 
+# setwd("C:/Users/ShidaNyimbili/Desktop/R/Mafisa-R-Scripts/Scripts")
+# list.files()
+# 
+# shiny::runApp()
+# 
+# library(rsconnect)
+# rsconnect::deployApp('C:/Users/ShidaNyimbili/Desktop/R/Mafisa-R-Scripts/Scripts')
+
 sf_use_s2(FALSE)
 
+#Load the files
 
-# communities1 = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "Cohort01_CommunityBoundaries.gpkg"))
-# communities2 = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "Cohort2_CommunityBoundaries.gpkg"))
+# communities1 = st_read("App_files/Cohort01_CommunityBoundaries.gpkg")
+# communities2 = st_read("App_files/Cohort2_CommunityBoundaries.gpkg")
 # 
-# reports24 = read.csv(file.path(getwd(), "Input data", "Grazing spatial data", "Master Grazing Reports 2024-April 2025_corrected.csv"))
-# reports25 = read.csv(file.path(getwd(), "Input data", "Grazing spatial data", "Grazing Coordinates and Data_2025_10_14.csv"))
+# blocks1 = st_read("App_files/20251014Cohort01OverlapCorrection.shp")
+# blocks2 = st_read("App_files/20251014Cohort2OverlapCorrection.shp")
 # 
-# blocks1 = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "20251014_Cohort_0_1_Overlap_Correction", "20251014Cohort01OverlapCorrection.shp"))
-# blocks2 = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "20251014_Cohort_2_Overlap_Correction", "20251014Cohort2OverlapCorrection.shp"))
+# blocks1_elig = st_read("App_files/20251014Cohort01OverlapCorrection_eligible.gpkg")
+# blocks2_elig = st_read("App_files/20251014Cohort2OverlapCorrection_eligible.gpkg")
 # 
-# blocks1_elig = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "20251014Cohort01OverlapCorrection_eligible.gpkg"))
-# blocks2_elig = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "20251014Cohort2OverlapCorrection_eligible.gpkg"))
+# PAI_boundaries = st_read("App_files/PAI_ClusterBoundaries.gpkg")
+# project_boundary = st_read("App_files/VCS4915_Outer Boundary.shp")
 # 
-# project_boundary = st_read(file.path(getwd(), "Input data", "Eligibility", "VCS4915_Outer Boundary.shp"))
-# UNZA_points = read.csv(file.path(getwd(), "Input data", "UNZA 2025 Data", "UNZA 2025 Phase 1 data.csv"))
-# presample_points = read.csv(file.path(getwd(), "outputs", "Pre-sampling data_processed.csv"))
+# reports24 = read.csv("App_files/Master Grazing Reports 2024-April 2025_corrected.csv")
+# reports25 = read.csv("App_files/Grazing Coordinates and Data_2025_10_14.csv")
 # 
-# boreholes = read.csv(file.path(getwd(), "Input data", "Borehole data 2024_and2025.csv"))
-# PAI_boundaries = st_read(file.path(getwd(), "Input data", "Grazing spatial data", "PAI_ClusterBoundaries.gpkg"))
+# boreholes = read.csv("App_files/Borehole data 2024_and2025.csv")
+# UNZA_points = read.csv("App_files/UNZA 2025 Phase 1 data.csv")
+# 
+# presample_points = read.csv("App_files/Pre-sampling data_processed.csv")
 
-communities1 = st_read("Cohort01_CommunityBoundaries.gpkg")
-communities2 = st_read("Cohort2_CommunityBoundaries.gpkg")
 
-blocks1 = st_read("20251014Cohort01OverlapCorrection.shp")
-blocks2 = st_read("20251014Cohort2OverlapCorrection.shp")
 
-blocks1_elig = st_read("20251014Cohort01OverlapCorrection_eligible.gpkg")
-blocks2_elig = st_read("20251014Cohort2OverlapCorrection_eligible.gpkg")
+# Define base directory as absolute path
+# base_dir <- "C:/Users/ShidaNyimbili/Downloads/App files/App files/Input data/Input data"
+base_dir <- "C:/Users/ShidaNyimbili/Desktop/R/Mafisa-R-Scripts/Scripts"
 
-PAI_boundaries = st_read("PAI_ClusterBoundaries.gpkg")
-project_boundary = st_read("VCS4915_Outer Boundary.shp")
 
-reports24 = read.csv("Master Grazing Reports 2024-April 2025_corrected.csv")
-reports25 = read.csv("Grazing Coordinates and Data_2025_10_14.csv")
+communities1 <- st_read(file.path(base_dir, "Grazing spatial data", "Cohort01_CommunityBoundaries.gpkg"))
+communities2 <- st_read(file.path(base_dir, "Grazing spatial data", "Cohort2_CommunityBoundaries.gpkg"))
 
-boreholes = read.csv("Borehole data 2024_and2025.csv")
-UNZA_points = read.csv("UNZA 2025 Phase 1 data.csv")
+blocks1 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014_Cohort_0_1_Overlap_Correction", "20251014Cohort01OverlapCorrection.shp"))
+blocks2 <- st_read(file.path(base_dir, "Grazing spatial data", "20251014_Cohort_2_Overlap_Correction", "20251014Cohort2OverlapCorrection.shp"))
 
-presample_points = read.csv("Pre-sampling data_processed.csv")
+blocks1_elig <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort01OverlapCorrection_eligible.gpkg"))
+blocks2_elig <- st_read(file.path(base_dir, "Grazing spatial data", "20251014Cohort2OverlapCorrection_eligible.gpkg"))
+
+PAI_boundaries <- st_read(file.path(base_dir, "Grazing spatial data", "PAI_ClusterBoundaries.gpkg"))
+
+project_boundary <- st_read(file.path(base_dir, "Grazing spatial data", "VCS4915_Outer Boundary.shp"))
+
+
+reports24 <- read.csv(file.path(base_dir, "Grazing spatial data", "Master Grazing Reports 2024-April 2025_corrected.csv"))
+reports25 <- read.csv(file.path(base_dir, "Grazing spatial data", "Grazing Coordinates and Data_2025_10_14.csv"))
+
+boreholes <- read.csv(file.path(base_dir, "Grazing spatial data", "Borehole data 2024_and2025.csv"))
+UNZA_points <- read.csv(file.path(base_dir, "Grazing spatial data", "UNZA 2025 Phase 1 data.csv"))
+
+presample_points <- read.csv(file.path(base_dir, "Grazing spatial data", "Pre-sampling data_processed.csv"))
+
 
 
 # Base map group names
